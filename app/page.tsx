@@ -42,6 +42,7 @@ export default async function Home() {
             ptName={countrie.translations.por.common}
             flag={countrie.flags.svg}
             flagAlt={countrie.flags.alt}
+            key={countrie.name.common}
           />
 
         )
