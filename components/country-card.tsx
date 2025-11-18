@@ -18,7 +18,7 @@ export default function CountryCard({ name, ptName, flag, flagAlt }: CountryCard
                             
             '>
                     <Image
-                        className="object-cointain"
+                        className="object-contain"
                         src={flag}
                         alt={flagAlt}
                         fill
