@@ -20,12 +20,10 @@ export default function Search() {
 					`${BASE_URL}name/${term.trim()}?${PATH_PARAMS}`
 					:
 					`${BASE_URL}all?${PATH_PARAMS}`
+
 				const response = await fetch(url);
-				// console.log(`url usada ${url}`)
-				// console.log(`response ${response.ok}`)
 				if (response.ok) {
 					const data = await response.json();
-					// console.log(data)
 					setCountries(data);
 					return
 				}

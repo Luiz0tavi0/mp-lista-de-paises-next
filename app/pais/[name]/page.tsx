@@ -32,8 +32,16 @@ async function getCountryByName(name: string): Promise<CountryPage> {
   const response = await fetch(url)
   const data = await response.json()
   return data[0]
-}
 
+}
+async function getCountriesByLanguage(lang: string): Promise<CountryPage[]> {
+  const url = `https://restcountries.com/v3.1/lang/${lang}`;
+  const response = await fetch(url);
+  const data = await response.json();
+  return data
+
+
+}
 type CountryPageParams = {
   params: { name: string }
 }
@@ -44,7 +52,11 @@ export default async function CountryPage({ params: { name } }: CountryPageParam
   if (country?.borders) {
     borderCountries = await getCountryBorderByCodes(country.borders);
   }
-  console.log(borderCountries)
+  let countriesSameLanguage = await getCountriesByLanguage(Object.values(country.languages)[0]);
+  countriesSameLanguage = countriesSameLanguage.filter((c) => c.cca3 !== country.cca3)
+
+
+  console.log(countriesSameLanguage)
   const formater = Intl.NumberFormat('en', { notation: 'compact' });
 
   if (!country) {
@@ -122,6 +134,23 @@ export default async function CountryPage({ params: { name } }: CountryPageParam
           <><h3 className='mt-12 text-2xl font-semibold text-gray-800'>Países que fazem fronteira</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 w-full container gap-2">
               {borderCountries.map((border) => (
+                <CountryCard
+                  key={border.cca3}
+                  name={border.name.common}
+                  ptName={border.translations.por.common}
+                  flag={border.flags.svg}
+                  flagAlt={border.flags.alt}
+                />
+              ))}
+            </div>
+          </>
+        }
+      </section>
+      <section>
+        {countriesSameLanguage &&
+          <><h3 className='mt-12 text-2xl font-semibold text-gray-800'>Países com idioma em comum</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 w-full container gap-2">
+              {countriesSameLanguage.map((border) => (
                 <CountryCard
                   key={border.cca3}
                   name={border.name.common}
